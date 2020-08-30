@@ -17,7 +17,7 @@ def main():
     while 1:
         tetris_piece.move()
         tetris_board.draw_board(tetris_piece.ball, tetris_piece.ballrect)
-
+# IMPECABLE PAPA
 
 if __name__ == "__main__":
     main()
