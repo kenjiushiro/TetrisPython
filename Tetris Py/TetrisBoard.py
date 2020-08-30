@@ -7,6 +7,7 @@ black = 0, 0, 0
 class TetrisBoard:
 
     def __init__(self, size):
+        pygame.init()
         self.screen = pygame.display.set_mode(size)
 
     def draw_board(self, ball, ballrect):

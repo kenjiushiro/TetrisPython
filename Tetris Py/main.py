@@ -5,14 +5,16 @@ from TetrisBoard import TetrisBoard
 from pygame.color import THECOLORS
 
 print(THECOLORS.get("red"))
+
+
 def main():
     size = width, height = 1280, 720
-    pygame.init()
 
     tetris_piece = TetrisPiece(width, height)
     tetris_board = TetrisBoard(size)
 
     while 1:
+        tetris_piece.move()
         tetris_board.draw_board(tetris_piece.ball, tetris_piece.ballrect)
 
 
