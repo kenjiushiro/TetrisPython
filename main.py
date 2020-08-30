@@ -8,6 +8,7 @@ print(THECOLORS.get("red"))
 
 
 def main():
+    pygame.init()
     size = width, height = 1280, 720
 
     tetris_piece = TetrisPiece(width, height)
