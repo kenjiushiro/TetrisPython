@@ -1,68 +1,49 @@
-import pygame
-import sys
-
-
-class KeyboardEvents:
-    def __init__(self):
-        self.up_key = False
-        self.down_key = False
-        self.left_key = False
-        self.right_key = False
-
-    def get_direction(self):
-        x = 0
-        y = 0
-        if self.up_key:
-            y += -1
-        if self.down_key:
-            y += 1
-        if self.left_key:
-            x += -1
-        if self.right_key:
-            x += 1
-        return [x, y]
-
-    def set_events(self, eventos):
-        for event in eventos:
-            if event.type == pygame.QUIT:
-                sys.exit()
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    self.up_key = True
-                if event.key == pygame.K_a:
-                    self.left_key = True
-                if event.key == pygame.K_s:
-                    self.down_key = True
-                if event.key == pygame.K_d:
-                    self.right_key = True
-
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_w:
-                    self.up_key = False
-                if event.key == pygame.K_a:
-                    self.left_key = False
-                if event.key == pygame.K_s:
-                    self.down_key = False
-                if event.key == pygame.K_d:
-                    self.right_key = False
+import random
 
 
 class TetrisPiece:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.keyboard_events = KeyboardEvents()
-        self.ball = pygame.image.load("intro_ball.gif")
-        self.ballrect = self.ball.get_rect()
 
-    def move(self):
+    def __init__(self):
+        self.__current_rotation = 0
+        self.__get_new_piece()
 
-        eventos = pygame.event.get()
-        self.keyboard_events.set_events(eventos)
-        speed = self.keyboard_events.get_direction()
+    def __str__(self):
+        return str(self.__this_piece)
 
-        if self.ballrect.left + speed[0] < 0 or self.ballrect.right + speed[0] > self.width or self.ballrect.top + speed[1] < 0 or self.ballrect.bottom + speed[1] > self.height:
-            pass
-        else:
-            self.ballrect = self.ballrect.move(speed)
+    def __get_new_piece(self):
+        self.__pieces = ["S", "Z", "L", "J", "T", "I", "O"]
+
+        self.__dict_pieces = {"S": [["0...", "00..", ".0..", "...."], [".00.", "00..", "....", "...."]],
+                              "Z": [[".0..", "00..", "0...", "...."], ["00..", ".00.", "....", "...."]],
+                              "I": [[".0..", ".0..", ".0..", ".0.."], ["....", "0000", "....", "...."]],
+                              "T": [[".0..", "000.", "....", "...."], [".0..", ".00.", ".0..", "...."],
+                                    ["000.", ".0..", "....", "...."], [".0..", "00..", ".0..", "...."]],
+                              "L": [["0...", "0...", "00..", "...."], ["000.", "0...", "....", "...."],
+                                    ["00..", ".0..", ".0..", "...."], ["..0.", "000.", "....", "...."]],
+                              "J": [[".0..", ".0..", "00..", "...."], ["0...", "000.", "....", "...."],
+                                    ["00..", "0...", "0...", "...."], ["000.", "..0.", "....", "...."]],
+                              "O": [["....", ".00.", ".00.", "...."]]}
+
+        self.__dict_colors = {"S": (255, 128, 0),
+                              "Z": (0, 255, 0),
+                              "L": (0, 128, 255),
+                              "J": (255, 0, 0),
+                              "T": (0, 255, 128),
+                              "I": (128, 0, 255),
+                              "O": (255, 0, 255)}
+
+        randomPiece = random.choice(self.__pieces)
+        self.__this_piece = randomPiece
+        self.__shapes = self.__dict_pieces[randomPiece]
+        self.shape = self.__shapes[self.__current_rotation]
+        self.color = self.__dict_colors[randomPiece]
+
+    def next_rotation(self):
+        return self.__shapes[0] if self.__current_rotation + 1 >= len(self.__shapes) else self.__shapes[self.__current_rotation + 1]
+
+    def rotate(self):
+        self.__current_rotation += 1
+        if self.__current_rotation >= len(self.__shapes):
+            self.__current_rotation = 0
+        self.shape = self.__shapes[self.__current_rotation]
+
